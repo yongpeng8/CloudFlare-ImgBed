@@ -37,16 +37,6 @@ export async function onRequest(context) {  // Contents of context object
 
     // 获得上传IP
     const uploadIp = getUploadIp(request);
-
-    const allowedUploadIps = (env.ALLOWED_UPLOAD_IPS || "")
-        .split(",")
-        .map(ip => ip.trim())
-        .filter(Boolean);
-
-    if (allowedUploadIps.length > 0 && !allowedUploadIps.includes(uploadIp)) {
-        return createResponse('Error: Upload IP is not allowed', { status: 403 });
-    }
-
     // 判断上传ip是否被封禁
     const isBlockedIp = await isBlockedUploadIp(env, uploadIp);
     if (isBlockedIp) {
